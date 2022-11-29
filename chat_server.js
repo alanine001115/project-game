@@ -146,7 +146,7 @@ io.on("connection", (socket)=>{
     if (socket.request.session.user){
         const { username, avatar, name } = socket.request.session.user;
         onlineUsers[username] = {avatar, name};
-        console.log(onlineUsers)
+        // console.log(onlineUsers)
 
         //broadcast the signed-in user
         io.emit("add user", JSON.stringify(socket.request.session.user));
@@ -192,8 +192,21 @@ io.on("connection", (socket)=>{
         io.emit("add message",JSON.stringify(message));
     });
 
-    socket.on("someone typing", ()=>{
-        io.emit("add reminder",JSON.stringify(socket.request.session.user));
+
+    // Invite someone, with names of the invitee and the inviter
+    socket.on("invite someone", (username, inviter)=>{
+        io.emit("add reminder",JSON.stringify(username), JSON.stringify(inviter));
+    });
+
+
+    // The invitee acceps and inform the inviter to start game
+    socket.on("start game", (username, opponent)=>{
+        io.emit("inviter start",JSON.stringify(username), JSON.stringify(opponent));
+    });
+
+    // Inform opponent your gems count
+    socket.on("send gems", (receiver, numGems)=>{
+        socket.broadcast.emit("receive gems", JSON.stringify(receiver), JSON.stringify(numGems));
     });
 });
 

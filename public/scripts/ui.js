@@ -140,6 +140,8 @@ const OnlineUsersPanel = (function() {
                     $("<div id='username-" + username + "'></div>")
                         .append(UI.getUserDisplay(onlineUsers[username]))
                 );
+
+
             }
         }
     };
@@ -231,18 +233,59 @@ const ChatPanel = (function() {
 		chatArea.scrollTop(chatArea[0].scrollHeight);
     };
 
-
-    const addReminder = function(user) {
-        const typingReminder = $("#typing-reminder");	
+    // Modified for matching
+    const addReminder = function(user, inviter) {
         const currentUser = Authentication.getUser();
-        if (user.username != currentUser.username){
-            clearTimeout(mytimeout);
-            typingReminder.text(user.name+ " is typing...");
-            mytimeout= setTimeout(() =>{typingReminder.text("");},3000);
+        if (user == currentUser.name){
+            if (confirm(inviter + " has invited you to play a match! Press OK to accept")) {
+                // Start your own game
+                startGame(inviter);
+
+                // Sends back to inviter to start his game
+                Socket.getSocket().emit("start game", inviter, currentUser.name);
+            } else {
+                // Do nothing
+            }
         }
 	};
 
-    return { initialize, update, addMessage, addReminder };
+
+    // When the invitee accepts the invite, the inviter's game will be started
+    const acceptedInvite = function(name, opponent){
+        const currentUser = Authentication.getUser();
+        if (name == currentUser.name){
+            startGame(opponent);
+        }
+    };
+
+    // Receive opponent gems count to determine win or lose
+    const receiveGemCount = function(receiver, numGems){
+        const currentUser = Authentication.getUser();
+        setTimeout(function(){
+            if (receiver == currentUser.name){
+                $("#opponent-gems").text(numGems);
+                ownGems = parseInt($("#dummy").text());
+                $("#final-gems").text(ownGems);
+                if (parseInt(numGems) < ownGems){
+                    $("#game-result").text("You WIN!");
+                    $("#game-over").show();
+                }
+                else if (parseInt(numGems) == ownGems){
+                    $("#game-result").text("It's a TIE!");
+                    $("#game-over").show();
+                }
+                else{
+                    $("#game-result").text("You LOSE!");
+                    $("#game-over").show();
+                    
+                }
+
+        }},200)
+            
+
+    }
+
+    return { initialize, update, addMessage, addReminder, acceptedInvite, receiveGemCount };
 })();
 
 const typingReminder = $("#typing-reminder");	
@@ -252,7 +295,8 @@ const UI = (function() {
     // This function gets the user display
     const getUserDisplay = function(user) {
         return $("<div class='field-content row shadow'></div>")
-            .append($("<span class='user-avatar'>" +
+            // Added a onclick event to the avatar
+            .append($("<span class='user-avatar' onclick='invitePlayer("+JSON.stringify(user.name)+")'>" +
 			        Avatar.getCode(user.avatar) + "</span>"))
             .append($("<span class='user-name'>" + user.name + "</span>"));
     };
@@ -270,3 +314,13 @@ const UI = (function() {
 
     return { getUserDisplay, initialize };
 })();
+
+function invitePlayer(username){
+    
+    const currentUser = Authentication.getUser();
+    Socket.getSocket().emit("invite someone", username, currentUser.username);
+}
+
+function sendOpponentGemsCount(receiver, numGems){
+    Socket.getSocket().emit("send gems", receiver, numGems);
+}
