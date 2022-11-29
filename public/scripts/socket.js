@@ -60,13 +60,30 @@ const Socket = (function() {
             ChatPanel.addMessage(message);
         });
 
-        // Set up the add message event
-        socket.on("add reminder", (user) => {
+        // Set up the add message event (modified for invite)
+        socket.on("add reminder", (user, inviter) => {
             user = JSON.parse(user);
+            inviter = JSON.parse(inviter);        
 
-            // Add the message to the chatroom           
-            ChatPanel.addReminder(user);
+            ChatPanel.addReminder(user, inviter);
         });
+
+        // The inviter received a confirm and starts game
+        socket.on("inviter start", (username, opponent) => { 
+            username = JSON.parse(username);
+            opponent = JSON.parse(opponent);
+
+            ChatPanel.acceptedInvite(username, opponent);
+        });
+
+        // Receives a gems count for ending
+        socket.on("receive gems", (receiver, numGems) => { 
+            receiver = JSON.parse(receiver);
+            numGems = JSON.parse(numGems);
+
+            ChatPanel.receiveGemCount(receiver, numGems);
+        });
+
     };
 
     // This function disconnects the socket from the server

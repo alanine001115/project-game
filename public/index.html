@@ -46,7 +46,7 @@
                                 </linearGradient>
                             </defs>
                             <text id="game-title" x="50%" y="45%">GEM RUSH!</text>
-                            <text x="50%" y="60%">Invite firend to play!(click)</text>
+                            <text x="50%" y="60%">Invite firend to play!(click on avatar)</text>
                         </svg>
                 
                         <svg xmlns="http://www.w3.org/2000/svg" id="game-over" style="display: none">
@@ -58,9 +58,19 @@
                                 </linearGradient>
                             </defs>
                             <text x="50%" y="50%">
-                                Time's up! You have collected
-                                <tspan id="final-gems">0</tspan>
-                                gem(s).
+                                <tspan x="50%" dy="1.4em">
+                                Time's up! You have collected <tspan id="final-gems">0</tspan> gem(s).
+                                </tspan>
+                                <tspan x="50%" dy="1.4em">
+                                Your opponent <tspan id="opponent-name">opponent</tspan> has collected <tspan id="opponent-gems">0</tspan> gem(s)!
+                                </tspan>
+                                <tspan x="50%" dy="1.4em">
+                                <tspan id="game-result">win/lose</tspan>
+                                </tspan>
+                                <tspan x="50%" dy="1.4em">
+                                Invite others to play again!
+                                </tspan>
+                                <tspan id="dummy">0</tspan>
                             </text>
                         </svg>
                     </div>
@@ -106,6 +116,8 @@
         </div>
     </div>
 
+
+
     <script src="/socket.io/socket.io.min.js"></script>
     <script src="scripts/socket.js"></script>
     <script src="scripts/avatar.js"></script>
@@ -134,6 +146,13 @@
             },
             () => { SignInForm.show(); }
         );
+    });
+    // Removed the onclick starter, now controlled by socket
+    // Stored opponent name as parameter here
+    function startGame(opponent){
+        $("#dummy").hide();
+        $("#game-over").hide();
+        $("#opponent-name").text = opponent;
         const cv = $("canvas").get(0);
         const context = cv.getContext("2d");
 
@@ -144,7 +163,7 @@
             gameover: new Audio("src/gameover.mp3")
         };
 
-        const totalGameTime = 20;   // Total game time in seconds
+        const totalGameTime = 6;   // Total game time in seconds
         const gemMaxAge = 3000;     // The maximum age of the gems in milliseconds
         let gameStartTime = 0;      // The timestamp when the game starts
         let collectedGems = 0;      // The number of gems collected in the game
@@ -173,11 +192,14 @@
             /* TODO */
             /* Handle the game over situation here */
             if (timeRemaining<=0){
-                $("#final-gems").text(collectedGems);
+                endgems = collectedGems;
+                $("#dummy").text(collectedGems);
+                $("#opponent-name").text(opponent);
                 sounds.background.pause();
                 sounds.gameover.play();
-                $("#game-over").show();
-                canceltAnimationFrame(doFrame);
+                sendOpponentGemsCount(opponent,collectedGems);
+                //canceltAnimationFrame(doFrame);
+                return
             }
 
 
@@ -221,7 +243,6 @@
         }
 
         /* Handle the start of the game */
-        $("#game-start").on("click", function() {
             /* Hide the start screen */
             $("#game-start").hide();
             sounds.background.play();
@@ -262,8 +283,9 @@
 
             /* Start the game */
             requestAnimationFrame(doFrame);
-        });
-    });
+    }
+
+
     </script>
 </body>
 </html>

@@ -1,4 +1,9 @@
 {
+    "123": {
+        "avatar": "Hamster",
+        "name": "123",
+        "password": "$2b$10$b2EhUMcDndLuXNQpmUiyHeRs2PTybjObOfjUiv9GIBIDGTi8iT.se"
+    },
     "tony": {
         "avatar": "Owl",
         "name": "Tony Lee",
@@ -18,5 +23,10 @@
         "avatar": "Bear",
         "name": "aa",
         "password": "$2b$10$RQCrK2bfYFh5KvmVRXLVoO2qLGrhJJronJDf2jkEotKUqBRQmF1iS"
+    },
+    "qwe": {
+        "avatar": "Rabbit Face",
+        "name": "qwe",
+        "password": "$2b$10$aI5xo9X2wsoa9L2xpwGMvO8I0i2Xj/.Cw3JVYZAaT9ikqjPBaIuZe"
     }
 }
