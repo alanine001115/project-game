@@ -242,19 +242,11 @@ const ChatPanel = (function() {
         }
 	};
 
-    const removeReminder = function(user) {
-        const typingReminder = $("#typing-reminder");		
-        const currentUser = Authentication.getUser();
-        if (user.username != currentUser.username){
-            typingReminder.text("");
-        }
-	};
-
-    return { initialize, update, addMessage, addReminder , removeReminder };
+    return { initialize, update, addMessage, addReminder };
 })();
 
 const typingReminder = $("#typing-reminder");	
-mytimeout= setTimeout(() =>{typingReminder.text("");},0);
+mytimeout= setTimeout(() =>{typingReminder.text("hahaha");},0);
 
 const UI = (function() {
     // This function gets the user display
