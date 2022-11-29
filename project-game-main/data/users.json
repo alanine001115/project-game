@@ -1,0 +1,32 @@
+{
+    "123": {
+        "avatar": "Hamster",
+        "name": "123",
+        "password": "$2b$10$b2EhUMcDndLuXNQpmUiyHeRs2PTybjObOfjUiv9GIBIDGTi8iT.se"
+    },
+    "tony": {
+        "avatar": "Owl",
+        "name": "Tony Lee",
+        "password": "$2b$10$Yxb2fSgA5RFn9Oz9TxjLLuve/GiPXCs2DWVFhyFDr4qz39qglwp8e"
+    },
+    "may": {
+        "avatar": "Rabbit",
+        "name": "May Wong",
+        "password": "$2b$10$gLc3Ri9W6P650EKKbexw6uvirV8Bar7gmvAtMcoMiPiR3rsY50GVu"
+    },
+    "qq": {
+        "avatar": "Hamster",
+        "name": "qq",
+        "password": "$2b$10$n.Men8qNCvm8hWuH4TpqH.3QlQPqlrtPAbO5lAICdJiaE7qH9sp4W"
+    },
+    "aa": {
+        "avatar": "Bear",
+        "name": "aa",
+        "password": "$2b$10$RQCrK2bfYFh5KvmVRXLVoO2qLGrhJJronJDf2jkEotKUqBRQmF1iS"
+    },
+    "qwe": {
+        "avatar": "Rabbit Face",
+        "name": "qwe",
+        "password": "$2b$10$aI5xo9X2wsoa9L2xpwGMvO8I0i2Xj/.Cw3JVYZAaT9ikqjPBaIuZe"
+    }
+}
